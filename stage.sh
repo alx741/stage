@@ -20,22 +20,43 @@ function clear_stage
     rm -f "$STAGE_FILE"
 }
 
+function stage
+{
+    # echo "$@"
+    for file in "$@"
+    do
+        if [ ! -a "$file" ];then
+            displayError "$file does not exist"
+            exit 3
+        fi
+
+        echo "$arg"
+    done
+}
+
 
 if [ "$#" -eq 0 ]; then
     print_stage
+
+elif [ "$#" -eq 1 ]; then
+    case $1 in
+        clear|cl)
+            clear_stage
+            ;;
+        list|ls)
+            print_stage
+            ;;
+        *)
+            stage $@
+            ;;
+    esac
+
+else
+    stage $@
 fi
 
-case $1 in
-    clear|cl)
-        clear_stage
-        ;;
-    list|ls)
-        print_stage
-        ;;
-esac
-
-shift
-for arg in "$@"
-do
-    echo "$arg"
-done
+# shift
+# for arg in "$@"
+# do
+#     echo "$arg"
+# done
