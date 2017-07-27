@@ -22,15 +22,15 @@ function clear_stage
 
 function stage
 {
-    # echo "$@"
     for file in "$@"
     do
-        if [ ! -a "$file" ];then
+        if [ ! -e "$file" ];then
             displayError "$file does not exist"
             exit 3
         fi
 
-        echo "$arg"
+        file_path=$(readlink -f "$file")
+        echo "$file_path" >> "$STAGE_FILE"
     done
 }
 
