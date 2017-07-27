@@ -34,6 +34,43 @@ function stage
     done
 }
 
+function cp_stage
+{
+    destination="$1"
+    if [ ! -d "$destination" ]; then
+        displayError "$destination is not a directory"
+        exit 4
+    fi
+
+    if [ -f "$STAGE_FILE" ]; then
+        while read file; do
+            cp -rfv "$file" "$destination"
+        done < "$STAGE_FILE"
+    else
+        displayWarning "The stage is empty"
+        exit 2
+    fi
+}
+
+function mv_stage
+{
+    destination="$1"
+    if [ ! -d "$destination" ]; then
+        displayError "$destination is not a directory"
+        exit 4
+    fi
+
+    if [ -f "$STAGE_FILE" ]; then
+        while read file; do
+            mv -fv "$file" "$destination"
+        done < "$STAGE_FILE"
+    else
+        displayWarning "The stage is empty"
+        exit 2
+    fi
+}
+
+
 
 if [ "$#" -eq 0 ]; then
     print_stage
@@ -51,12 +88,19 @@ elif [ "$#" -eq 1 ]; then
             ;;
     esac
 
+elif [ "$#" -eq 2 ]; then
+    case $1 in
+        cp)
+            cp_stage $2
+            ;;
+        mv)
+            mv_stage $2
+            ;;
+        *)
+            stage $@
+            ;;
+    esac
+
 else
     stage $@
 fi
-
-# shift
-# for arg in "$@"
-# do
-#     echo "$arg"
-# done
