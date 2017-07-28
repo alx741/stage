@@ -46,6 +46,7 @@ function cp_stage
         while read file; do
             cp -rfv "$file" "$destination"
         done < "$STAGE_FILE"
+        clear_stage
     else
         displayWarning "The stage is empty"
         exit 2
@@ -64,6 +65,7 @@ function mv_stage
         while read file; do
             mv -fv "$file" "$destination"
         done < "$STAGE_FILE"
+        clear_stage
     else
         displayWarning "The stage is empty"
         exit 2
